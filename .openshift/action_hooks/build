@@ -1,0 +1,15 @@
+#!/bin/bash
+# This is a simple build script and will be executed on your CI system if
+# available.  Otherwise it will execute while your application is stopped
+# before the deploy step.  This script gets executed directly, so it
+# could be python, php, ruby, etc.
+
+BASE=misc/
+
+for DIR in fileadmin typo3temp typo3conf uploads
+do
+    if [ ! -d $OPENSHIFT_DATA_DIR/${DIR} ]; then
+         cp -R ${OPENSHIFT_REPO_DIR}/${BASE}/${DIR} $OPENSHIFT_DATA_DIR/${DIR}
+    fi
+    ln -sf $OPENSHIFT_DATA_DIR/${DIR} $OPENSHIFT_REPO_DIR/php/${DIR}
+done
